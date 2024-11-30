@@ -3,6 +3,7 @@ from routers import router
 
 from fastapi.middleware.cors import CORSMiddleware
 
+from core import CORSSetting
 
 app = FastAPI()
 app.add_middleware(
