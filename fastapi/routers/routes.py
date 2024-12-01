@@ -79,6 +79,41 @@ async def post_ticket(
     return {"msg": "Ticket successfully added"}
 
 
+@router.patch("/ticket/solve")
+async def update_ticket_solved(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    user_ip = request.client.host
+
+    chat = await db.execute(select(Chat).where(Chat.user_ip == user_ip))
+    chat = chat.scalars().first()
+
+    if not chat:
+        raise HTTPException(status_code=404, detail="Chat not found for this IP")
+
+    ticket = await db.execute(
+        select(Ticket).where(Ticket.chat_id == chat.id).order_by(Ticket.date.desc())
+    )
+    ticket = ticket.scalars().first()
+
+    if not ticket:
+        raise HTTPException(status_code=404, detail="No tickets found for this chat")
+
+    ticket.solved = False
+    ticket.date = datetime.now()
+
+    db.add(ticket)
+    await db.commit()
+    await db.refresh(ticket)
+
+    return {
+        "msg": "Ticket updated successfully",
+        "ticket_id": ticket.id,
+        "solved": ticket.solved,
+    }
+
+
 @router.get("/chats")
 async def get_chats(
     request: Request,
