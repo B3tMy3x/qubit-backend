@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
 load_dotenv()
+st.set_page_config(
+    page_title="Admin Panel"
+)
 
 BASE_URL = os.getenv("BASE_URL")
 
