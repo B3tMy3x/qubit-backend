@@ -48,3 +48,32 @@ async def verify_token(request: Request, token: str):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
         )
+
+
+async def verify_token(request: Request, token: str):
+    try:
+        payload = jwt.decode(token, str(SECRET_KEY), algorithms=[ALGORITHM])
+
+        token_ip = payload.get("ip")
+        if token_ip != request.client.host:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN, detail="IP address mismatch"
+            )
+
+        user_username = payload.get("sub")
+
+        if not user_username:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Token data invalid"
+            )
+
+        return {"id": user_username}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+        )
+    except jwt.InvalidTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+        )

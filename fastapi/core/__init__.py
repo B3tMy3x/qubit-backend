@@ -1,1 +1,1 @@
-from core.config import CORSSetting, AuthSettings, BaseSettings
+from core.config import AuthSettings, BaseSettings

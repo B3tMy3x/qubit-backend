@@ -10,3 +10,48 @@ services:
     ports:
       - "5435:5432"
     restart: always
+    networks:
+      - app_network
+
+  streamlit:
+    environment:
+      - BASE_URL=http://fastapi:8000/api
+    build:
+      context: .
+      dockerfile: ./streamlit/Dockerfile
+    expose:
+      - "8501"
+    depends_on:
+      - fastapi
+    networks:
+      - app_network
+
+  fastapi:
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:cPiytKVt4h8R7YqhSASCLm0D8oP9hJjeQtHU5cxFd0M@pg:5432/postgres
+      - SECRET_KEY=ygzMCllL4OVfQdvrBflm6UnOgLwWNXvOxcbGHH1tMsM
+    build:
+      context: .
+      dockerfile: ./fastapi/Dockerfile
+    expose:
+      - "8000"
+    depends_on:
+      - pg
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+      - streamlit
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
