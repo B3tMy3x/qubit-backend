@@ -6,6 +6,6 @@ COPY ./streamlit /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8501
+EXPOSE 9003
 
 CMD ["streamlit", "run", "streamlit.py", "--server.port=9003"]
