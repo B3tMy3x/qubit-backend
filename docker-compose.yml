@@ -19,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: ./streamlit/Dockerfile
+    ports:
+    - "9003:9003"
     expose:
       - "9003"
     depends_on:
@@ -35,6 +37,8 @@ services:
       dockerfile: ./fastapi/Dockerfile
     expose:
       - "9002"
+    ports:
+      - "9002:9002" 
     depends_on:
       - pg
     networks:
