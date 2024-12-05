@@ -16,6 +16,7 @@ def authenticate_user(username, password):
     response = requests.post(
         f"{BASE_URL}/login",
         json={"username": username, "password": password},
+        verify=False,
     )
     if response.status_code == 200:
         token = response.json().get("access_token")
@@ -32,9 +33,9 @@ def make_api_call(endpoint, token, method='GET', data=None):
     url = f"{BASE_URL}/{endpoint}"
     
     if method == 'GET':
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False,)
     elif method == 'POST':
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, verify=False,)
     
     if response.status_code == 200:
         return response.json()
