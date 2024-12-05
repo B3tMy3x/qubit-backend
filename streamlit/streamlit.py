@@ -3,6 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
+from streamlit.components.v1 import html
 
 load_dotenv()
 st.set_page_config(
@@ -49,18 +50,35 @@ def solve_ticket(ticket_id, token):
     else:
         st.error(f"Не удалось решить задачу {ticket_id}")
 
-
 def login_page():
-    st.title("Вход")
-    username = st.text_input("Имя пользователя")
-    password = st.text_input("Пароль", type="password")
+    st.markdown(
+        """
+        <h1 style="color: #57009b; font-size: 2.5rem; font-weight: bold;">
+            Qubit Admin Panel
+        </h1>
+        """,
+        unsafe_allow_html=True
+    ) 
+    st.markdown("### ваш центр управления RAG-системой")
 
+    st.markdown("---")
+    st.header("Вход")
+
+    username = st.text_input("Имя пользователя", placeholder="Введите ваше имя пользователя")
+    password = st.text_input("Пароль", type="password", placeholder="Введите ваш пароль")
     if st.button("Войти"):
         token = authenticate_user(username, password)
         if token:
             st.session_state.token = token
             st.session_state.page = "chats"
             st.rerun()
+        else:
+            st.error("Неверное имя пользователя или пароль. Попробуйте снова.")
+
+
+    st.markdown("---")
+    st.caption("© 2024 Qubit")
+
 
 
 def chats_page():
@@ -179,7 +197,7 @@ def main():
                 default_index=0,
                 orientation="vertical",
             )
-
+    st.logo("http://localhost:5173/public/Qubit-21.png", size="large")
     if selected == "Вход":
         st.session_state.page = "login"
     elif selected == "Чаты":

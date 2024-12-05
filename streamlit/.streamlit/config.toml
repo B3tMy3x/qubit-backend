@@ -1,0 +1,8 @@
+[client]
+showErrorDetails = false
+[theme]
+primaryColor="#57009b"
+base = "dark"
+[logger]
+level = "info"
+messageFormat = "%(asctime)s %(levelname) -7s %(name)s: %(message)s"
