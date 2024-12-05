@@ -10,6 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 9002
 RUN mkdir -p /certs
 
-COPY ./fastapi/certs/privkey.pem ./fastapi/certs/fullchain.pem
+COPY ./fastapi/certs/privkey.pem /app/fastapi/certs/privkey.pem
+COPY ./fastapi/certs/fullchain.pem /app/fastapi/certs/fullchain.pem
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9002", "--ssl-keyfile", "./fastapi/certs/privkey.pem", "--ssl-certfile", "./fastapi/certs/fullchain.pem"]
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9002", "--ssl-keyfile", "/app/fastapi/certs/privkey.pem", "--ssl-certfile", "/app/fastapi/certs/fullchain.pem"]
