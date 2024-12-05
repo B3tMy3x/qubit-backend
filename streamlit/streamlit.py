@@ -197,7 +197,7 @@ def main():
                 default_index=0,
                 orientation="vertical",
             )
-    st.logo("http://localhost:5173/public/Qubit-21.png", size="large")
+    st.logo("https://b3tmy3x.github.io/depl-widget/Qubit-21.png", size="large")
     if selected == "Вход":
         st.session_state.page = "login"
     elif selected == "Чаты":
