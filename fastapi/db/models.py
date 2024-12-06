@@ -4,6 +4,8 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
+import random
+
 class User(Base):
     __tablename__ = "users"
     
@@ -16,6 +18,7 @@ class Chat(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     user_ip: Mapped[str] = mapped_column()
+    assurance: Mapped[str] = mapped_column(default=f"{random.uniform(0, 1)}")
     tickets = relationship("Ticket", back_populates="chat")
 
 class Ticket(Base):

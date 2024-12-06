@@ -1,7 +1,7 @@
 [client]
 showErrorDetails = false
 [theme]
-primaryColor="#57009b"
+primaryColor="#8f00ff"
 base = "dark"
 [logger]
 level = "info"

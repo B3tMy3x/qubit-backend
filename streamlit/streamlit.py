@@ -54,7 +54,7 @@ def solve_ticket(ticket_id, token):
 def login_page():
     st.markdown(
         """
-        <h1 style="color: #57009b; font-size: 2.5rem; font-weight: bold;">
+        <h1 style="color: #8f00ff; font-size: 2.5rem; font-weight: bold;">
             Qubit Admin Panel
         </h1>
         """,
@@ -94,18 +94,33 @@ def chats_page():
     chats = make_api_call("chats", token)
 
     if chats:
+        sort_option = st.selectbox(
+            "Выберите режим сортировки:",
+            ["По умолчанию", "По уверенности (возрастание)", "По уверенности (убывание)"]
+        )
+
+        if sort_option == "По уверенности (возрастание)":
+            chats.sort(key=lambda x: float(x["assurance"]))
+        elif sort_option == "По уверенности (убывание)":
+            chats.sort(key=lambda x: float(x["assurance"]), reverse=True)
+
         for chat in chats:
-            with st.expander(f"💬 Чат {chat['id']} (IP: {chat['user_ip']})"):
+            assurance_value = float(chat["assurance"])
+
+            chat_title = f"💬 Чат {chat['id']} (IP: <span style='color:#8f00ff; font-weight: bold;'>{chat['user_ip']}</span>) Уверенность:  <span style='color:#8f00ff; font-weight: bold;'> {assurance_value:.2f}</span>"
+
+            st.markdown(chat_title, unsafe_allow_html=True)
+            st.progress(assurance_value)
+            with st.expander("Задачи", expanded=True):
+
                 tickets = make_api_call(f"chats/{chat['id']}", token)
                 if tickets:
-                    st.subheader("Задачи:")
                     for ticket in tickets:
                         display_ticket(ticket, token)
                 else:
                     st.write("Нет задач для этого чата.")
     else:
         st.write("Чаты не найдены.")
-
 
 def display_ticket(ticket, token):
     st.markdown("---")
