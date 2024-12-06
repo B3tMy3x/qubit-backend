@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.orm import validates
 import random
 
 class User(Base):
@@ -18,9 +19,14 @@ class Chat(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     user_ip: Mapped[str] = mapped_column()
-    assurance: Mapped[str] = mapped_column(default=f"{random.uniform(0.02, 0.95)}")
+    assurance: Mapped[float] = mapped_column()
     tickets = relationship("Ticket", back_populates="chat")
-
+    
+    @validates('assurance')
+    def generate_assurance(self, key, value):
+        if value is None:
+            return random.uniform(0.02, 0.95)
+        return value
 class Ticket(Base):
     __tablename__ = "tickets"
     
