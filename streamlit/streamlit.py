@@ -111,7 +111,7 @@ def chats_page():
 
             st.markdown(chat_title, unsafe_allow_html=True)
             st.progress(assurance_value)
-            with st.expander("Задачи", expanded=True):
+            with st.expander("Задачи", expanded=False):
 
                 tickets = make_api_call(f"chats/{chat['id']}", token)
                 if tickets:
