@@ -7,29 +7,33 @@ from datetime import datetime
 from sqlalchemy.orm import validates
 import random
 
+
 class User(Base):
     __tablename__ = "users"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
 
+
 class Chat(Base):
     __tablename__ = "chats"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     user_ip: Mapped[str] = mapped_column()
-    assurance: Mapped[float] = mapped_column()
+    assurance: Mapped[float] = mapped_column(nullable=False)
     tickets = relationship("Ticket", back_populates="chat")
-    
-    @validates('assurance')
+
+    @validates("assurance")
     def generate_assurance(self, key, value):
         if value is None:
             return random.uniform(0.02, 0.95)
         return value
+
+
 class Ticket(Base):
     __tablename__ = "tickets"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     question: Mapped[str] = mapped_column()
     answer: Mapped[str] = mapped_column()
