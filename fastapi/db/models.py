@@ -18,7 +18,7 @@ class Chat(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     user_ip: Mapped[str] = mapped_column()
-    assurance: Mapped[str] = mapped_column(default=f"{random.uniform(0, 1)}")
+    assurance: Mapped[str] = mapped_column(default=f"{random.uniform(0.02, 0.95)}")
     tickets = relationship("Ticket", back_populates="chat")
 
 class Ticket(Base):
