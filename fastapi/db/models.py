@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.orm import validates
 import random
-
+from sqlalchemy import String
 
 class User(Base):
     __tablename__ = "users"
@@ -21,7 +21,7 @@ class Chat(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_ip: Mapped[str] = mapped_column()
-    assurance: Mapped[float] = mapped_column(nullable=False)
+    assurance: Mapped[str] = mapped_column(String, nullable=False)
     tickets = relationship("Ticket", back_populates="chat")
 
     @validates("assurance")
